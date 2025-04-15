@@ -1,0 +1,27 @@
+# Combined Dataset Configuration
+path: /home/heathcliff/myProject
+train:
+  - GB Road Turns Detection.v5i.yolov8/train/images
+  - BDD100K/bdd100k/bdd100k/images/100k/train
+val:
+  - GB Road Turns Detection.v5i.yolov8/valid/images
+  - BDD100K/bdd100k/bdd100k/images/100k/val
+test: GB Road Turns Detection.v5i.yolov8/test/images
+
+nc: 7
+names:
+  - Left-turn
+  - right_turn
+  - straight_road
+  - car
+  - person
+  - traffic light
+  - traffic sign
+
+# Roboflow Metadata
+roboflow:
+  workspace: nust-dsai-training-program
+  project: gb-road-turns-detection
+  version: 5
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/nust-dsai-training-program/gb-road-turns-detection/dataset/5

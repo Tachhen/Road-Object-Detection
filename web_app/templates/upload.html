@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Road Analyzer </title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --black: #000000;
+            --white: #ffffff;
+            --gray: #1a1a1a;
+            --primary: #4d4dff;
+            --secondary: #ff4dff;
+            --tertiary: #4dffb5;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: var(--black);
+            color: var(--white);
+            line-height: 1.4;
+            min-height: 100vh;
+            padding: 0;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        /* Background animation elements */
+        .bg-circle {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.15;
+            z-index: 0;
+        }
+        
+        .circle-1 {
+            width: 300px;
+            height: 300px;
+            background: var(--primary);
+            top: -100px;
+            left: -100px;
+            animation: float 15s ease-in-out infinite;
+        }
+        
+        .circle-2 {
+            width: 400px;
+            height: 400px;
+            background: var(--secondary);
+            bottom: -150px;
+            right: -100px;
+            animation: float 18s ease-in-out infinite reverse;
+        }
+        
+        .circle-3 {
+            width: 200px;
+            height: 200px;
+            background: var(--tertiary);
+            top: 50%;
+            left: 30%;
+            animation: float 12s ease-in-out infinite 2s;
+        }
+        
+        @keyframes float {
+            0%, 100% {
+                transform: translate(0, 0);
+            }
+            25% {
+                transform: translate(50px, 50px);
+            }
+            50% {
+                transform: translate(0, 100px);
+            }
+            75% {
+                transform: translate(-50px, 50px);
+            }
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 4rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 2px solid var(--white);
+        }
+        
+        .logo {
+            font-weight: 800;
+            font-size: 2rem;
+            letter-spacing: -0.05em;
+            text-transform: uppercase;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            position: relative;
+        }
+        
+        .logo::after {
+            content: "";
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.5s ease;
+        }
+        
+        .logo:hover::after {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+        
+        .nav-link {
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 600;
+            position: relative;
+            font-size: 1.1rem;
+            padding: 0.5rem 1rem;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link:hover {
+            border-bottom: 2px solid var(--primary);
+        }
+        
+        h1 {
+            font-size: 4rem;
+            font-weight: 700;
+            letter-spacing: -0.05em;
+            margin-bottom: 3rem;
+            line-height: 1;
+            text-transform: uppercase;
+            position: relative;
+            display: inline-block;
+            color: var(--white);
+        }
+        
+        h1::after {
+            content: "";
+            position: absolute;
+            bottom: -1rem;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+        
+        .upload-container {
+            border: 2px dashed var(--white);
+            border-radius: 0;
+            padding: 5rem 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            margin-bottom: 3rem;
+            position: relative;
+            overflow: hidden;
+            background: var(--gray);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+        
+        .upload-container::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                45deg,
+                transparent 48%,
+                rgba(255, 255, 255, 0.1) 49%,
+                rgba(255, 255, 255, 0.1) 51%,
+                transparent 52%
+            );
+            background-size: 20px 20px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .upload-container:hover::before {
+            opacity: 1;
+            animation: diagonalMove 1s linear infinite;
+        }
+        
+        @keyframes diagonalMove {
+            0% {
+                background-position: 0 0;
+            }
+            100% {
+                background-position: 20px 20px;
+            }
+        }
+        
+        .upload-container:hover {
+            background: rgba(255,255,255,0.05);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+        
+        .upload-icon {
+            font-size: 3rem;
+            margin-bottom: 2rem;
+            font-weight: 700;
+            animation: bounce 2s infinite;
+            color: var(--white);
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-15px);
+            }
+            60% {
+                transform: translateY(-7px);
+            }
+        }
+        
+        .upload-container p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            font-weight: 500;
+            color: var(--white);
+        }
+        
+        .file-input {
+            display: none;
+        }
+        
+        .file-label {
+            display: inline-block;
+            padding: 15px 30px;
+            background: var(--white);
+            color: var(--black);
+            border-radius: 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            border: 2px solid var(--white);
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .file-label::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(0, 0, 0, 0.2),
+                transparent
+            );
+            transition: 0.5s;
+        }
+        
+        .file-label:hover::before {
+            left: 100%;
+        }
+        
+        .file-label:hover {
+            background: transparent;
+            color: var(--white);
+            transform: translateY(-2px);
+        }
+        
+        #file-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .thumbnail-container {
+            position: relative;
+            overflow: hidden;
+            aspect-ratio: 1/1;
+            background: var(--gray);
+            border: 2px solid var(--gray);
+            transition: all 0.3s ease;
+        }
+        
+        .thumbnail-container::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                135deg,
+                rgba(77, 77, 255, 0.3),
+                rgba(255, 77, 255, 0.3)
+            );
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1;
+        }
+        
+        .thumbnail-container:hover::before {
+            opacity: 1;
+        }
+        
+        .thumbnail-container:hover {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        
+        .thumbnail {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.5s ease;
+        }
+        
+        .thumbnail-container:hover .thumbnail {
+            transform: scale(1.1);
+        }
+        
+        .file-name {
+            font-size: 0.9rem;
+            margin-top: 1rem;
+            color: var(--white);
+            font-weight: 500;
+            text-align: center;
+            transition: color 0.3s ease;
+        }
+        
+        .thumbnail-container:hover + .file-name {
+            color: var(--primary);
+        }
+        
+        .submit-btn {
+            display: block;
+            width: 100%;
+            max-width: 350px;
+            margin: 4rem auto 0;
+            padding: 18px 32px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: var(--white);
+            border: none;
+            border-radius: 0;
+            font-size: 1.2rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .submit-btn::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.4),
+                transparent
+            );
+            transition: 0.5s;
+        }
+        
+        .submit-btn:hover::before {
+            left: 100%;
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+        
+        footer {
+            margin-top: 6rem;
+            padding-top: 3rem;
+            border-top: 2px solid var(--white);
+            font-size: 1rem;
+            color: var(--white);
+            text-align: center;
+        }
+        
+        footer p {
+            font-weight: 500;
+            position: relative;
+            display: inline-block;
+        }
+        
+        footer p::after {
+            content: "";
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transform: scaleX(0);
+            transition: transform 0.5s ease;
+        }
+        
+        footer:hover p::after {
+            transform: scaleX(1);
+        }
+        
+        @media (max-width: 768px) {
+            header {
+                margin-bottom: 3rem;
+            }
+            
+            .logo {
+                font-size: 1.5rem;
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .upload-container {
+                padding: 3rem 1.5rem;
+            }
+            
+            #file-list {
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+                gap: 1.5rem;
+            }
+            
+            .submit-btn {
+                padding: 15px 25px;
+                font-size: 1rem;
+            }
+            
+            .circle-1, .circle-2, .circle-3 {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background animation elements -->
+    <div class="bg-circle circle-1"></div>
+    <div class="bg-circle circle-2"></div>
+    <div class="bg-circle circle-3"></div>
+    
+    <div class="container">
+        <header>
+            <div class="logo">Road Analyzer</div>
+            <a href="#" class="nav-link">About</a>
+        </header>
+        
+        <main>
+            <h1>Upload Road Images For Analysis</h1>
+            
+            <form method="post" enctype="multipart/form-data" id="upload-form">
+                <div class="upload-container" id="drop-zone">
+                    <div class="upload-icon">↓</div>
+                    <p>Drag & Drop Your Road Images Here</p>
+                    
+                    <label for="file-input" class="file-label">
+                        Browse Files
+                    </label>
+                    <input type="file" name="files[]" id="file-input" multiple accept="image/*" class="file-input">
+                </div>
+                
+                <div id="file-list"></div>
+                
+                <button type="submit" class="submit-btn">Analyze Road Conditions</button>
+            </form>
+        </main>
+        
+        <footer>
+            <p>© 2025 Road Analyzer </p>
+        </footer>
+    </div>
+
+    <script>
+        const fileInput = document.getElementById('file-input');
+        const fileList = document.getElementById('file-list');
+        const dropZone = document.getElementById('drop-zone');
+        
+        // Handle drag and drop
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.style.background = 'rgba(255,255,255,0.1)';
+            dropZone.style.borderColor = 'var(--primary)';
+        });
+        
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.style.background = 'var(--gray)';
+            dropZone.style.borderColor = 'var(--white)';
+        });
+        
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.style.background = 'var(--gray)';
+            dropZone.style.borderColor = 'var(--white)';
+            
+            if (e.dataTransfer.files.length) {
+                fileInput.files = e.dataTransfer.files;
+                updateFileList();
+            }
+        });
+        
+        // Handle file selection
+        fileInput.addEventListener('change', updateFileList);
+        
+        function updateFileList() {
+            fileList.innerHTML = '';
+            
+            if (!fileInput.files.length) return;
+            
+            Array.from(fileInput.files).forEach((file, index) => {
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    const container = document.createElement('div');
+                    
+                    const thumbContainer = document.createElement('div');
+                    thumbContainer.className = 'thumbnail-container';
+                    
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.className = 'thumbnail';
+                    img.alt = `Preview ${index + 1}`;
+                    
+                    const name = document.createElement('div');
+                    name.className = 'file-name';
+                    name.textContent = file.name.length > 20 
+                        ? file.name.substring(0, 17) + '...' 
+                        : file.name;
+                    
+                    thumbContainer.appendChild(img);
+                    container.appendChild(thumbContainer);
+                    container.appendChild(name);
+                    fileList.appendChild(container);
+                }
+                
+                reader.readAsDataURL(file);
+            });
+        }
+    </script>
+</body>
+</html>

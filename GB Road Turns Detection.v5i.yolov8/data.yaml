@@ -1,0 +1,22 @@
+# data.yaml for GB Road Turns Detection
+path: /home/heathcliff/myProject/GB Road Turns Detection.v5i.yolov8
+train: train/images
+val: valid/images
+test: My Test  # or test/images if you have a separate test set
+
+# Class names
+names:
+  0: left_turn
+  1: right_turn
+  2: sharp_turn
+  3: curve_left
+  4: curve_right
+  # Add/remove classes as per your dataset
+
+# Additional parameters (optional)
+nc: 5  # number of classes
+roboflow:
+  license: CC BY 4.0
+  project: gb-road-turns-detection
+  url: https://universe.roboflow.com/your-project-url
+  version: 5

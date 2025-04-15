@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Road Analyzer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --black: #000000;
+            --white: #ffffff;
+            --gray: #1a1a1a;
+            --primary: #0000ff;
+            --secondary: #ff00ff;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: var(--black);
+            color: var(--white);
+            line-height: 1.4;
+            min-height: 100vh;
+            padding: 0;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+        
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--white);
+        }
+        
+        .logo {
+            font-weight: 700;
+            font-size: 1.5rem;
+            letter-spacing: -0.05em;
+            color: var(--white);
+        }
+        
+        .nav-link {
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 500;
+            position: relative;
+        }
+        
+        .nav-link::after {
+            content: "";
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--white);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        h1 {
+            font-size: 3rem;
+            font-weight: 500;
+            letter-spacing: -0.05em;
+            margin-bottom: 2rem;
+            line-height: 1.1;
+            color: var(--white);
+        }
+        
+        .upload-container {
+            border: 1px dashed var(--white);
+            border-radius: 0;
+            padding: 4rem 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+            background: var(--gray);
+        }
+        
+        .upload-container:hover {
+            background: rgba(255,255,255,0.05);
+        }
+        
+        .upload-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--white);
+        }
+        
+        .file-input {
+            display: none;
+        }
+        
+        .file-label {
+            display: inline-block;
+            padding: 12px 24px;
+            background: var(--white);
+            color: var(--black);
+            border-radius: 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            border: 1px solid var(--white);
+        }
+        
+        .file-label:hover {
+            background: transparent;
+            color: var(--white);
+        }
+        
+        #file-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .thumbnail-container {
+            position: relative;
+            overflow: hidden;
+            aspect-ratio: 1/1;
+        }
+        
+        .thumbnail {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.5s ease;
+        }
+        
+        .thumbnail-container:hover .thumbnail {
+            transform: scale(1.05);
+        }
+        
+        .file-name {
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
+            color: var(--white);
+        }
+        
+        .submit-btn {
+            display: block;
+            width: 100%;
+            max-width: 300px;
+            margin: 3rem auto 0;
+            padding: 14px 28px;
+            background: var(--white);
+            color: var(--black);
+            border: none;
+            border-radius: 0;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .submit-btn:hover {
+            background: transparent;
+            color: var(--white);
+            border: 1px solid var(--white);
+        }
+        
+        footer {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--white);
+            font-size: 0.9rem;
+            color: var(--white);
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .upload-container {
+                padding: 3rem 1.5rem;
+            }
+            
+            #file-list {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">ROAD ANALYZER</div>
+            <a href="#" class="nav-link">About</a>
+        </header>
+        
+        <main>
+            <h1>Upload road images for analysis</h1>
+            
+            <form method="post" enctype="multipart/form-data" id="upload-form">
+                <div class="upload-container" id="drop-zone">
+                    <div class="upload-icon">↓</div>
+                    <p>Drag & drop images here or</p>
+                    
+                    <label for="file-input" class="file-label">
+                        Select Files
+                    </label>
+                    <input type="file" name="files[]" id="file-input" multiple accept="image/*" class="file-input">
+                </div>
+                
+                <div id="file-list"></div>
+                
+                <button type="submit" class="submit-btn">Analyze Images</button>
+            </form>
+        </main>
+        
+        <footer>
+            <p>© 2025 Road Analyzer .</p>
+        </footer>
+    </div>
+
+    <script>
+        const fileInput = document.getElementById('file-input');
+        const fileList = document.getElementById('file-list');
+        const dropZone = document.getElementById('drop-zone');
+        
+        // Handle drag and drop
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.style.background = 'rgba(255,255,255,0.1)';
+        });
+        
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.style.background = 'var(--gray)';
+        });
+        
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.style.background = 'var(--gray)';
+            
+            if (e.dataTransfer.files.length) {
+                fileInput.files = e.dataTransfer.files;
+                updateFileList();
+            }
+        });
+        
+        // Handle file selection
+        fileInput.addEventListener('change', updateFileList);
+        
+        function updateFileList() {
+            fileList.innerHTML = '';
+            
+            if (!fileInput.files.length) return;
+            
+            Array.from(fileInput.files).forEach((file, index) => {
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    const container = document.createElement('div');
+                    
+                    const thumbContainer = document.createElement('div');
+                    thumbContainer.className = 'thumbnail-container';
+                    
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.className = 'thumbnail';
+                    img.alt = `Preview ${index + 1}`;
+                    
+                    const name = document.createElement('div');
+                    name.className = 'file-name';
+                    name.textContent = file.name.length > 20 
+                        ? file.name.substring(0, 17) + '...' 
+                        : file.name;
+                    
+                    thumbContainer.appendChild(img);
+                    container.appendChild(thumbContainer);
+                    container.appendChild(name);
+                    fileList.appendChild(container);
+                }
+                
+                reader.readAsDataURL(file);
+            });
+        }
+    </script>
+</body>
+</html>
